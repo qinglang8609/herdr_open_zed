@@ -10,3 +10,9 @@ id = "open"
 title = "Open with Zed"
 contexts = ["workspace"]
 command = ["sh", "scripts/open-zed.sh"]
+
+[[actions]]
+id = "ttt"
+title = "Open TTT Tab"
+contexts = ["workspace"]
+command = ["sh", "scripts/open-ttt.sh"]

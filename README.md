@@ -4,12 +4,14 @@
 
 ## 快捷键
 
-| 按键 | 作用 |
-|---|---|
-| `prefix+shift+z` | 用 Zed 打开当前工作区的目录 |
-| `prefix+shift+t` | 新建名为 `TTT` 的 tab，并在其中运行 `ttt` |
+| 按键 | 作用 | 平台 |
+|---|---|---|
+| `prefix+shift+z` | 用 Zed 打开当前工作区的目录 | 仅 macOS |
+| `prefix+shift+t` | 新建名为 `TTT` 的 tab，并在其中运行 `ttt` | Linux / macOS |
 
 `prefix` 默认是 `ctrl+b`。
+
+Linux 上没有 `Open with Zed` 这个 action（manifest 里限定在 macOS），只绑 `prefix+shift+t` 即可。
 
 ## 安装
 
@@ -54,10 +56,10 @@ herdr server reload-config
 | 依赖 | 用途 | 检查 |
 |---|---|---|
 | herdr ≥ 0.9.5 | 必需 | `herdr --version` |
-| Zed | `prefix+shift+z` | macOS 上装在 `/Applications/Zed.app` 即可，不需要 `zed` 在 PATH |
+| Zed | `prefix+shift+z`（仅 macOS） | 装在 `/Applications/Zed.app` 即可，不需要 `zed` 在 PATH |
 | ttt | `prefix+shift+t` | `command -v ttt` |
 
-只支持 macOS。Zed 通过应用包内的 `Contents/MacOS/cli` 启动，也可以用 `ZED_CLI` 环境变量指定别的路径。
+Zed 通过应用包内的 `Contents/MacOS/cli` 启动，也可以用 `ZED_CLI` 环境变量指定别的路径。
 
 ## 为什么没有右键菜单
 

@@ -2,16 +2,9 @@
 # 新建一个名为 TTT 的 tab，并在其中启动 ttt。
 set -e
 
-herdr="${HERDR_BIN_PATH:-herdr}"
+. "$(dirname "$0")/common.sh"
 
-# 目标目录沿用当前工作区
-json_str() {
-  printf '%s' "${HERDR_PLUGIN_CONTEXT_JSON:-}" \
-    | grep -o "\"$1\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" \
-    | head -1 \
-    | sed "s/.*\"$1\"[[:space:]]*:[[:space:]]*\"//" \
-    | sed 's/"$//'
-}
+herdr="${HERDR_BIN_PATH:-herdr}"
 dir=$(json_str workspace_cwd)
 
 if ! command -v ttt >/dev/null 2>&1; then
@@ -21,7 +14,7 @@ fi
 
 # tab create 没有 --command，只能先建 tab 拿到 root pane，再往里 run
 created=$("$herdr" tab create --label "TTT" --focus ${dir:+--cwd "$dir"})
-# 用 python 解 JSON：返回里有多个 pane_id 字段，grep 取第一个靠格式巧合
+# 返回里有多个 pane_id 字段，必须明确取 root_pane 那个
 pane_id=$(printf '%s' "$created" | python3 -c "
 import json,sys
 try:

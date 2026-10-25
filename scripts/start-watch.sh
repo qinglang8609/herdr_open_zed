@@ -4,33 +4,37 @@
 # herdr 的 startup hook 是一次性命令，不能常驻，所以这里只负责把
 # 监控进程脱离出去。
 #
-# 防重不用 pgrep：pgrep -f 会匹配到执行它自己的那条 shell 命令，
-# 且 hook 短时间连续触发时两个实例可能都查到「没在跑」。
-# 改用 mkdir 原子锁：只有一个能建成目录。
+# 防重靠 pid 文件：写入监控进程的 pid，下次启动前检查它还活着没。
+# 不用 pgrep -f（会匹配到自己这条 shell），也不用 mkdir 锁（清理时机难掌握）。
 set -e
 
-zed_bin="${ZED_CLI:-/Applications/Zed.app/Contents/MacOS/cli}"
-[ -x "$zed_bin" ] || exit 0
+. "$(dirname "$0")/common.sh"
+
+zed_bin=$(zed_editor)
+[ -n "$zed_bin" ] || exit 0
 
 state="${HERDR_PLUGIN_STATE_DIR:-/tmp}"
-lock="$state/zed-tab-watch.lock"
+mkdir -p "$state" 2>/dev/null || true
+pidfile="$state/zed-tab-watch.pid"
+log="$state/zed-tab-watch.log"
 
-if ! mkdir "$lock" 2>/dev/null; then
-  # 已存在：持有者活着就退出，是残留就清掉重来
-  owner=$(cat "$lock/pid" 2>/dev/null || echo "")
-  if [ -n "$owner" ] && kill -0 "$owner" 2>/dev/null; then
+# 已在跑就不重复启动
+if [ -f "$pidfile" ]; then
+  old=$(cat "$pidfile" 2>/dev/null || echo "")
+  if [ -n "$old" ] && kill -0 "$old" 2>/dev/null; then
     exit 0
   fi
-  rm -rf "$lock" 2>/dev/null || true
-  mkdir "$lock" 2>/dev/null || exit 0
+  rm -f "$pidfile"
 fi
 
-touch "$lock/pid" 2>/dev/null || true
+# 日志超过 1MB 就轮转一份旧的，避免无限增长
+if [ -f "$log" ] && [ "$(wc -c < "$log")" -gt 1048576 ]; then
+  mv -f "$log" "$log.1" 2>/dev/null || true
+fi
 
 script_dir=$(cd "$(dirname "$0")" && pwd)
 
-# 监控自己负责删锁：把它作为参数传进去，进程退出时 trap 清理
-nohup "$script_dir/zed-tab-watch.sh" 3 "$lock" \
-  > "$state/zed-tab-watch.log" 2>&1 &
-echo $! > "$lock/pid"
+# nohup 让监控脱离 herdr 进程组；$! 就是它的 pid
+nohup "$script_dir/zed-tab-watch.sh" 3 > "$log" 2>&1 &
+echo $! > "$pidfile"
 exit 0

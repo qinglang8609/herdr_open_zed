@@ -108,20 +108,15 @@ cli 路径 = ZED_CLI 环境变量 或 /Applications/Zed.app/Contents/MacOS/cli �
 
 ```toml
 [[keys.command]]
-key = "prefix+z"
+key = "prefix+shift+z"
 type = "plugin_action"
 command = "fanchao.open-with-zed.open"
 description = "用 Zed 打开当前工作区"
 ```
 
-`prefix+z` 原本是 Herdr 默认的「缩放窗格」（zoom），腾给 Zed 之后 zoom 挪到 `prefix+shift+z`：
+不占用 `prefix+z`：那是 Herdr 默认的「缩放窗格」（zoom），保留原样。
 
-```toml
-[keys]
-zoom = "prefix+shift+z"
-```
-
-实测：`herdr config check` 通过，`herdr server reload-config` applied 无诊断；连续两次切换聚焦工作区后触发，Zed 分别打开了 `herdr_open_zed` 和 `herdr_pendant`，证明取的是当前工作区而非固定路径。
+实测：`herdr config check` 通过，`herdr server reload-config` applied 无诊断；切换聚焦工作区后触发，Zed 打开的目录也跟着变（`herdr_open_zed` → `herdr_pendant`），证明取的是当前工作区而非固定路径。
 
 ## 六、下一步
 

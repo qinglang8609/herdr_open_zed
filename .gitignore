@@ -1,0 +1,5 @@
+# herdr 运行态与本地记忆，不入库
+.brain/
+.pi-glla/
+
+.DS_Store

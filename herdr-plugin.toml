@@ -1,6 +1,6 @@
 id = "fanchao.open-with-zed"
 name = "Open with Zed"
-version = "0.4.0"
+version = "0.5.0"
 min_herdr_version = "0.9.5"
 description = "Open the current workspace in Zed, or start a TTT tab"
 platforms = ["linux", "macos"]
@@ -11,6 +11,12 @@ title = "Open with Zed"
 contexts = ["workspace"]
 platforms = ["macos"]
 command = ["sh", "scripts/open-zed.sh"]
+
+# 随 herdr 启动：本机有 Zed 就把检测进程拉起来。
+# hook 是一次性命令，脚本自己 nohup 脱离后立刻返回。
+[[startup]]
+command = ["sh", "scripts/start-watch.sh"]
+platforms = ["macos"]
 
 # 远端机器用：建一个名为 ZED 的 tab 当信号，
 # 由本地 Mac 上的 zed-tab-watch.sh 发现后打开 Zed 并关闭它。

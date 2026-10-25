@@ -100,14 +100,30 @@ cli 路径 = ZED_CLI 环境变量 或 /Applications/Zed.app/Contents/MacOS/cli �
 | Windows / Linux 支持 | 未做 | Zed 应用包路径为 macOS 形态，暂不声明。 |
 | `min_herdr_version` 取多少 | 待定 | 需确认 `workspace_cwd` 字段从哪个版本开始有；本机 0.9.5 有。 |
 
-## 五、下一步
+## 五、触发方式：快捷键（右键菜单不可行）
+
+**右键菜单走不通。** `herdr --default-config` 全文核对过：挂自定义命令只有 `[[keys.command]]` 一种配置，没有任何「往右键菜单加插件项」的配置项。所以插件 action `contexts = ["workspace"]` 不会出现在工作区右键菜单里，这一点已由用户实测确认。
+
+改用快捷键绑定同一个 action：
+
+```toml
+[[keys.command]]
+key = "prefix+shift+z"
+type = "plugin_action"
+command = "fanchao.open-with-zed.open"
+description = "用 Zed 打开当前工作区"
+```
+
+实测：`herdr config check` 通过，`herdr server reload-config` applied，调用后退出码 0、Zed 打开工作区根目录。
+
+## 六、下一步
 
 1. 写 manifest 与脚本。
 2. `herdr plugin link <目录>`。
 3. 在左侧工作区右键确认菜单项出现（这是唯一还没实证的环节）。
 4. 点击确认 Zed 打开的是工作区根目录，不是插件目录、不是深一级的 pane 目录。
 
-## 六、参考资料
+## 七、参考资料
 
 - 插件文档：https://herdr.dev/docs/plugins/
 - CLI 参考：https://herdr.dev/docs/cli-reference/

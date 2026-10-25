@@ -1,27 +1,19 @@
 id = "fanchao.open-with-zed"
 name = "Open with Zed"
-version = "0.2.0"
+version = "0.3.0"
 min_herdr_version = "0.9.5"
 description = "Open the current workspace in Zed, or start a TTT tab"
 platforms = ["linux", "macos"]
 
-# 本机装 Zed.app 才能用；非 macOS 上这个 action 不出现。
 [[actions]]
 id = "open"
 title = "Open with Zed"
 contexts = ["workspace"]
 platforms = ["macos"]
-command = ["sh", "scripts/open-zed.sh"]
+command = ["sh", "scripts/open-zed-smart.sh"]
 
 [[actions]]
 id = "ttt"
 title = "Open TTT Tab"
 contexts = ["workspace"]
 command = ["sh", "scripts/open-ttt.sh"]
-
-# 远端机器用：只写请求文件，由本地 Mac 上的 zz-zed-watch.sh 取走后调 Zed。
-[[actions]]
-id = "zed-request"
-title = "在本地 Zed 打开（远程）"
-contexts = ["workspace"]
-command = ["sh", "scripts/zed-request.sh"]

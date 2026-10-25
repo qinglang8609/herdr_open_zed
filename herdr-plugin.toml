@@ -18,10 +18,3 @@ id = "ttt"
 title = "Open TTT Tab"
 contexts = ["workspace"]
 command = ["sh", "scripts/open-ttt.sh"]
-
-# 远端机器用：由本地 Zed 发起 SSH 远程连接，远端不需装 Zed。
-[[actions]]
-id = "zed-remote"
-title = "Open in Local Zed (remote)"
-contexts = ["workspace"]
-command = ["sh", "scripts/zed-remote.sh"]

@@ -1,6 +1,6 @@
 id = "fanchao.open-with-zed"
 name = "Open with Zed"
-version = "0.3.0"
+version = "0.4.0"
 min_herdr_version = "0.9.5"
 description = "Open the current workspace in Zed, or start a TTT tab"
 platforms = ["linux", "macos"]
@@ -11,6 +11,14 @@ title = "Open with Zed"
 contexts = ["workspace"]
 platforms = ["macos"]
 command = ["sh", "scripts/open-zed.sh"]
+
+# 远端机器用：建一个名为 ZED 的 tab 当信号，
+# 由本地 Mac 上的 zed-tab-watch.sh 发现后打开 Zed 并关闭它。
+[[actions]]
+id = "zed-tab"
+title = "在本地 Zed 打开（远程）"
+contexts = ["workspace"]
+command = ["sh", "scripts/zed-tab.sh"]
 
 [[actions]]
 id = "ttt"

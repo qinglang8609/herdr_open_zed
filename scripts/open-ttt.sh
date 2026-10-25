@@ -21,8 +21,14 @@ fi
 
 # tab create 没有 --command，只能先建 tab 拿到 root pane，再往里 run
 created=$("$herdr" tab create --label "TTT" --focus ${dir:+--cwd "$dir"})
-pane_id=$(printf '%s' "$created" \
-  | grep -o '"pane_id":"[^"]*"' | head -1 | sed 's/.*:"//; s/"$//')
+# 用 python 解 JSON：返回里有多个 pane_id 字段，grep 取第一个靠格式巧合
+pane_id=$(printf '%s' "$created" | python3 -c "
+import json,sys
+try:
+    print(json.load(sys.stdin)['result']['root_pane']['pane_id'])
+except Exception:
+    pass
+" 2>/dev/null)
 
 if [ -z "$pane_id" ]; then
   echo "open-ttt: 解析新 tab 的 pane_id 失败: $created" >&2

@@ -6,10 +6,16 @@
 #   3. 有就打开 Zed（本地或远程），再关掉那个 tab
 #
 # 不遍历所有机器、不看非聚焦的会话。
-# 用法：zed-tab-watch.sh [间隔秒，默认 5]
+# 用法：zed-tab-watch.sh [间隔秒，默认 5] [锁目录]
 set -uo pipefail
 
 interval="${1:-5}"
+lock_dir="${2:-}"
+
+# 退出（含被杀）时清掉锁，否则下次启动会被残留锁挡住
+if [ -n "$lock_dir" ]; then
+  trap 'rm -rf "$lock_dir"' EXIT INT TERM
+fi
 herdr_bin="${HERDR_BIN_PATH:-herdr}"
 zed_bin="${ZED_CLI:-/Applications/Zed.app/Contents/MacOS/cli}"
 

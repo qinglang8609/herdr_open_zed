@@ -18,3 +18,10 @@ id = "ttt"
 title = "Open TTT Tab"
 contexts = ["workspace"]
 command = ["sh", "scripts/open-ttt.sh"]
+
+# 远端机器用：只写请求文件，由本地 Mac 上的 zz-zed-watch.sh 取走后调 Zed。
+[[actions]]
+id = "zed-request"
+title = "在本地 Zed 打开（远程）"
+contexts = ["workspace"]
+command = ["sh", "scripts/zed-request.sh"]

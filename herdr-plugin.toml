@@ -10,7 +10,7 @@ id = "open"
 title = "Open with Zed"
 contexts = ["workspace"]
 platforms = ["macos"]
-command = ["sh", "scripts/open-zed-smart.sh"]
+command = ["sh", "scripts/open-zed.sh"]
 
 [[actions]]
 id = "ttt"

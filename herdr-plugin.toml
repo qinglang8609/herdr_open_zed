@@ -16,3 +16,9 @@ id = "ttt"
 title = "Open TTT Tab"
 contexts = ["workspace"]
 command = ["sh", "scripts/open-ttt.sh"]
+
+[[actions]]
+id = "zed-remote"
+title = "Open in Local Zed (remote)"
+contexts = ["workspace"]
+command = ["sh", "scripts/zed-remote.sh"]

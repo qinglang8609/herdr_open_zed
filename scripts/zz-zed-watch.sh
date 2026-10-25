@@ -19,10 +19,13 @@ while true; do
   req=$(timeout 20 ssh -o BatchMode=yes -o ConnectTimeout=8 "$machine" \
         'cat ~/.local/state/herdr/plugins/fanchao.open-with-zed/zed-request 2>/dev/null' 2>/dev/null)
 
+  # 每次请求都带时间戳，同一个目录也能重复触发；
+  # 记录请求行的完整内容，避免一次按键触发两次。
   if [ -n "$req" ] && [ "$req" != "$(cat "$seen" 2>/dev/null)" ]; then
     printf '%s\n' "$req" > "$seen"
-    echo "[$(date '+%H:%M:%S')] $machine:$req"
-    "$zed_bin" "ssh://${machine}${req}" >/dev/null 2>&1 &
+    path=$(printf '%s\n' "$req" | tail -1)
+    echo "[$(date '+%H:%M:%S')] $machine:$path"
+    "$zed_bin" "ssh://${machine}${path}" >/dev/null 2>&1 &
   fi
 
   sleep 3
